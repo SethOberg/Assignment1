@@ -4,7 +4,6 @@ let pay = 0;
 let allComputers;
 let loanVar = 0;
 let chosenComputer;
-let balanceBasic = 0;
 
 window.addEventListener("load", startUp());
 
@@ -12,8 +11,6 @@ function startUp() {
   document.getElementById("balance").innerHTML = balance;
   document.getElementById("payAmount").innerHTML = pay;
   document.getElementById("loanLbl").innerHTML = pay;
-
-  document.getElementById("balanceBasic").innerHTML = balanceBasic;
 
   fetchUsers();
 }
@@ -37,7 +34,7 @@ function loan() {
   let regex = /\d/i;
 
   if (loanVar > 0) {
-    alert("Pay of loan before taking another one");
+    alert("Pay off loan before taking another one");
   } else {
     const result = prompt("Please enter amount");
     if (regex.test(result)) {
@@ -95,51 +92,35 @@ function computerSelected() {
 }
 
 function displayFeatures(features) {
-  //let split = features.split(",");
   let newFeatures = "";
-
-  //console.log("Test");
-  //console.log(split);
 
   console.log(" ");
   console.log("Features");
   console.log(features);
   console.log(" ");
 
-  // for(str of features) {
-  //     console.log(str + "\n");
-  //     newFeatures += str + "\n";
-  // }
   let listView = document.createElement("ul");
   let list = document.getElementById("featureList");
   document.getElementById("featureList").innerHTML = "";
 
   features.forEach((text) => {
-    //newFeatures += `${text} \n`;
     let listViewItem = document.createElement("li");
 
     listViewItem.appendChild(document.createTextNode(text));
-    //listView.appendChild(listViewItem);
     list.appendChild(listViewItem);
   });
 
   console.log(listView);
-
-  //document.getElementById("featureList").innerHTML = listView;
-
-  //console.log(newFeatures);
-
-  //return newFeatures;
 }
 
 function updateTexts(computerId) {
   const computer = allComputers.filter((item) => item.id == computerId);
 
-  // displayFeatures(computer[0].specs);
-
   console.log(computer[0]);
   displayFeatures(computer[0].specs);
-  document.getElementById("priceLbl").innerHTML = computer[0].price;
+
+  document.getElementById("priceLbl").innerHTML =
+    new Intl.NumberFormat().format(computer[0].price);
   document.getElementById("computerName").innerHTML = computer[0].title;
   document.getElementById("computerDescription").innerHTML =
     computer[0].description;
@@ -167,8 +148,6 @@ function work() {
 }
 
 function bank() {
-  //Fixa logic
-
   if (pay > 0) {
     if (loanVar > 0) {
       let loanPay = pay * 0.1;
@@ -189,6 +168,10 @@ function bank() {
     }
   }
 
+  if (loanVar === 0) {
+    document.getElementById("repayLoanBtn").style.display = "none";
+  }
+
   document.getElementById("payAmount").innerHTML = pay;
   document.getElementById("balance").innerHTML = balance;
   document.getElementById("loanLbl").innerHTML = loanVar;
@@ -204,7 +187,6 @@ function buy() {
   }
 }
 
-//fix
 function repayLoan() {
   let regex = /\d/i;
 
@@ -215,17 +197,18 @@ function repayLoan() {
     if (regex.test(result)) {
       const payBack = parseInt(result);
 
-      //ändra till utom lån
-      if (payBack > balance) {
+      if (payBack > pay) {
         alert("Insufficient funds");
+      } else if (payBack > loanVar) {
+        alert("Cannot pay back more than loan");
       } else {
-        balance -= payBack;
+        pay -= payBack;
         loanVar -= payBack;
 
         if (loanVar == 0) {
-          document.getElementById("repayLoanBtn").style.display = "block";
+          document.getElementById("repayLoanBtn").style.display = "none";
         }
-        document.getElementById("balance").innerHTML = balance;
+        document.getElementById("payAmount").innerHTML = pay;
         document.getElementById("loanLbl").innerHTML = loanVar;
       }
     } else {

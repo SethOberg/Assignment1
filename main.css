@@ -90,3 +90,9 @@ ul.listTest {
 #repayLoanBtn {
     display: none;
 }
+
+#featureList {
+    margin: 0;
+    padding: 20px;
+    list-style-type: square;
+}

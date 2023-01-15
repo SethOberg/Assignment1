@@ -26,8 +26,7 @@ fetchUsers().then((computers) => {
   allComputers = computers;
 
   addToSelect(computers);
-
-  console.log(computers);
+  updateTexts(allComputers[0].id);
 });
 
 function loan() {
@@ -46,6 +45,7 @@ function loan() {
         balance += loanAmount;
         loanVar += loanAmount;
         document.getElementById("repayLoanBtn").style.display = "block";
+        document.getElementById("loanInfo").style.display = "block";
         document.getElementById("loanLbl").innerHTML = loanVar;
       }
     } else {
@@ -54,10 +54,6 @@ function loan() {
   }
 
   document.getElementById("balance").innerText = balance;
-}
-
-function printComputers() {
-  console.log(allComputers);
 }
 
 function updateImage(str) {
@@ -84,7 +80,7 @@ function addComputersToDropdown(computers) {
 function computerSelected() {
   let selection = document.getElementById("computerSelect");
 
-  console.log(updateTexts(selection.options[selection.selectedIndex].value));
+  updateTexts(selection.options[selection.selectedIndex].value);
 
   chosenComputer = allComputers.filter(
     (item) => item.id == selection.options[selection.selectedIndex].value
@@ -93,11 +89,6 @@ function computerSelected() {
 
 function displayFeatures(features) {
   let newFeatures = "";
-
-  console.log(" ");
-  console.log("Features");
-  console.log(features);
-  console.log(" ");
 
   let listView = document.createElement("ul");
   let list = document.getElementById("featureList");
@@ -109,14 +100,11 @@ function displayFeatures(features) {
     listViewItem.appendChild(document.createTextNode(text));
     list.appendChild(listViewItem);
   });
-
-  console.log(listView);
 }
 
 function updateTexts(computerId) {
   const computer = allComputers.filter((item) => item.id == computerId);
 
-  console.log(computer[0]);
   displayFeatures(computer[0].specs);
 
   document.getElementById("priceLbl").innerHTML =
@@ -170,6 +158,7 @@ function bank() {
 
   if (loanVar === 0) {
     document.getElementById("repayLoanBtn").style.display = "none";
+    document.getElementById("loanInfo").style.display = "none";
   }
 
   document.getElementById("payAmount").innerHTML = pay;
@@ -207,6 +196,7 @@ function repayLoan() {
 
         if (loanVar == 0) {
           document.getElementById("repayLoanBtn").style.display = "none";
+          document.getElementById("loanInfo").style.display = "none";
         }
         document.getElementById("payAmount").innerHTML = pay;
         document.getElementById("loanLbl").innerHTML = loanVar;

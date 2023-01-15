@@ -96,3 +96,7 @@ ul.listTest {
   padding-left: 20px;
   list-style-type: square;
 }
+
+#loanInfo {
+  display: none;
+}

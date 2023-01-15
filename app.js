@@ -11,7 +11,6 @@ function startUp() {
   updateBalanceText(balance);
   updatePayText(pay);
   updateLoanText(loan);
-
   fetchUsers();
 }
 
@@ -88,15 +87,11 @@ function computerSelected() {
 }
 
 function displayFeatures(features) {
-  let newFeatures = "";
-
-  let listView = document.createElement("ul");
   let list = document.getElementById("featureList");
   document.getElementById("featureList").innerHTML = "";
 
   features.forEach((text) => {
     let listViewItem = document.createElement("li");
-
     listViewItem.appendChild(document.createTextNode(text));
     list.appendChild(listViewItem);
   });
@@ -106,7 +101,6 @@ function updateTexts(computerId) {
   const computer = allComputers.filter((item) => item.id == computerId);
 
   displayFeatures(computer[0].specs);
-
   updateComputerPriceText(computer[0].price);
   document.getElementById("computerName").innerHTML = computer[0].title;
   document.getElementById("computerDescription").innerHTML =
@@ -120,7 +114,6 @@ function addToSelect(computers) {
 
   for (let computer of computers) {
     let title = computer.title;
-
     let id = computer.id;
 
     options += `<option value="${id}">${title}</option>`;
@@ -156,8 +149,7 @@ function bank() {
   }
 
   if (loan === 0) {
-    document.getElementById("repayLoanBtn").style.display = "none";
-    document.getElementById("loanInfo").style.display = "none";
+    hideLoanRelatedInfo();
   }
 
   updatePayText(pay);
@@ -194,8 +186,7 @@ function repayLoan() {
         loan -= payBack;
 
         if (loan == 0) {
-          document.getElementById("repayLoanBtn").style.display = "none";
-          document.getElementById("loanInfo").style.display = "none";
+          hideLoanRelatedInfo();
         }
         updatePayText(pay);
         updateLoanText(loan);
@@ -226,4 +217,9 @@ function updatePayText(amount) {
 function updateComputerPriceText(price) {
   document.getElementById("priceLbl").innerHTML =
     new Intl.NumberFormat().format(price);
+}
+
+function hideLoanRelatedInfo() {
+  document.getElementById("repayLoanBtn").style.display = "none";
+  document.getElementById("loanInfo").style.display = "none";
 }

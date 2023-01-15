@@ -2,15 +2,15 @@ const API_URL = "https://hickory-quilled-actress.glitch.me/computers";
 let balance = 0;
 let pay = 0;
 let allComputers;
-let loanVar = 0;
+let loan = 0;
 let chosenComputer;
 
 window.addEventListener("load", startUp());
 
 function startUp() {
-  document.getElementById("balance").innerHTML = balance;
-  document.getElementById("payAmount").innerHTML = pay;
-  document.getElementById("loanLbl").innerHTML = pay;
+  updateBalanceText(balance);
+  updatePayText(pay);
+  updateLoanText(loan);
 
   fetchUsers();
 }
@@ -29,10 +29,10 @@ fetchUsers().then((computers) => {
   updateTexts(allComputers[0].id);
 });
 
-function loan() {
+function takeLoan() {
   let regex = /\d/i;
 
-  if (loanVar > 0) {
+  if (loan > 0) {
     alert("Pay off loan before taking another one");
   } else {
     const result = prompt("Please enter amount");
@@ -43,17 +43,17 @@ function loan() {
         alert("Loan cannot be higher than *2 balance");
       } else {
         balance += loanAmount;
-        loanVar += loanAmount;
+        loan += loanAmount;
         document.getElementById("repayLoanBtn").style.display = "block";
         document.getElementById("loanInfo").style.display = "block";
-        document.getElementById("loanLbl").innerHTML = loanVar;
+        updateLoanText(loan);
       }
     } else {
       alert("Please enter a number");
     }
   }
 
-  document.getElementById("balance").innerText = balance;
+  updateBalanceText(balance);
 }
 
 function updateImage(str) {
@@ -107,8 +107,7 @@ function updateTexts(computerId) {
 
   displayFeatures(computer[0].specs);
 
-  document.getElementById("priceLbl").innerHTML =
-    new Intl.NumberFormat().format(computer[0].price);
+  updateComputerPriceText(computer[0].price);
   document.getElementById("computerName").innerHTML = computer[0].title;
   document.getElementById("computerDescription").innerHTML =
     computer[0].description;
@@ -132,22 +131,22 @@ function addToSelect(computers) {
 
 function work() {
   pay += 100;
-  document.getElementById("payAmount").innerHTML = pay;
+  updatePayText(pay);
 }
 
 function bank() {
   if (pay > 0) {
-    if (loanVar > 0) {
+    if (loan > 0) {
       let loanPay = pay * 0.1;
 
-      if (loanPay <= loanVar) {
-        loanVar -= loanPay;
+      if (loanPay <= loan) {
+        loan -= loanPay;
         balance += pay * 0.9;
         pay = 0;
       } else {
         pay -= loanPay;
         balance += pay;
-        loanVar = 0;
+        loan = 0;
         pay = 0;
       }
     } else {
@@ -156,20 +155,20 @@ function bank() {
     }
   }
 
-  if (loanVar === 0) {
+  if (loan === 0) {
     document.getElementById("repayLoanBtn").style.display = "none";
     document.getElementById("loanInfo").style.display = "none";
   }
 
-  document.getElementById("payAmount").innerHTML = pay;
-  document.getElementById("balance").innerHTML = balance;
-  document.getElementById("loanLbl").innerHTML = loanVar;
+  updatePayText(pay);
+  updateBalanceText(balance);
+  updateLoanText(loan);
 }
 
 function buy() {
-  if (balance >= chosenComputer.price) {
-    balance -= chosenComputer.price;
-    document.getElementById("balance").innerHTML = balance;
+  if (pay >= chosenComputer.price) {
+    pay -= chosenComputer.price;
+    updatePayText(pay);
     alert("You bought a new computer!");
   } else {
     alert("Insufficient funds");
@@ -179,7 +178,7 @@ function buy() {
 function repayLoan() {
   let regex = /\d/i;
 
-  if (loanVar == 0) {
+  if (loan === 0) {
     alert("You have no loan to pay off");
   } else {
     const result = prompt("Please enter amount");
@@ -188,21 +187,43 @@ function repayLoan() {
 
       if (payBack > pay) {
         alert("Insufficient funds");
-      } else if (payBack > loanVar) {
+      } else if (payBack > loan) {
         alert("Cannot pay back more than loan");
       } else {
         pay -= payBack;
-        loanVar -= payBack;
+        loan -= payBack;
 
-        if (loanVar == 0) {
+        if (loan == 0) {
           document.getElementById("repayLoanBtn").style.display = "none";
           document.getElementById("loanInfo").style.display = "none";
         }
-        document.getElementById("payAmount").innerHTML = pay;
-        document.getElementById("loanLbl").innerHTML = loanVar;
+        updatePayText(pay);
+        updateLoanText(loan);
       }
     } else {
       alert("Please enter a number");
     }
   }
+}
+
+function updateBalanceText(amount) {
+  document.getElementById("balance").innerHTML = new Intl.NumberFormat().format(
+    amount
+  );
+}
+
+function updateLoanText(amount) {
+  document.getElementById("loanLbl").innerHTML = new Intl.NumberFormat().format(
+    amount
+  );
+}
+
+function updatePayText(amount) {
+  document.getElementById("payAmount").innerHTML =
+    new Intl.NumberFormat().format(amount);
+}
+
+function updateComputerPriceText(price) {
+  document.getElementById("priceLbl").innerHTML =
+    new Intl.NumberFormat().format(price);
 }

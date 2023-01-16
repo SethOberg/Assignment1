@@ -27,6 +27,7 @@ fetchUsers().then((computers) => {
 
   addToSelect(computers);
   updateTexts(allComputers[0].id);
+  selectedComputer = allComputers[0];
 });
 
 function takeLoan() {

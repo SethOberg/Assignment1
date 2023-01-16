@@ -27,8 +27,9 @@ fetchUsers().then((computers) => {
   allComputers = computers;
 
   addToSelect(computers);
-  updateComputerDetails(allComputers[0].id);
+  //first computer marked as selected
   selectedComputer = allComputers[0];
+  updateComputerDetails(selectedComputer);
 });
 
 function takeLoan() {
@@ -63,7 +64,6 @@ function updateImage(str) {
 }
 
 function addComputersToDropdown(computers) {
-  let ul = document.getElementById("computerListDropdown");
   let select = document.getElementById("computerSelect");
 
   for (computer of computers) {
@@ -81,11 +81,11 @@ function addComputersToDropdown(computers) {
 function computerSelected() {
   let selection = document.getElementById("computerSelect");
 
-  updateComputerDetails(selection.options[selection.selectedIndex].value);
-
   selectedComputer = allComputers.filter(
     (item) => item.id == selection.options[selection.selectedIndex].value
   )[0];
+
+  updateComputerDetails(selectedComputer);
 }
 
 function displayComputerFeatures(features) {
@@ -99,16 +99,14 @@ function displayComputerFeatures(features) {
   });
 }
 
-function updateComputerDetails(computerId) {
-  const computer = allComputers.filter((item) => item.id == computerId);
-
-  displayComputerFeatures(computer[0].specs);
-  updateComputerPriceText(computer[0].price);
-  document.getElementById("computerNameTxt").innerHTML = computer[0].title;
+function updateComputerDetails(computer) {
+  displayComputerFeatures(computer.specs);
+  updateComputerPriceText(computer.price);
+  document.getElementById("computerNameTxt").innerHTML = computer.title;
   document.getElementById("computerDescriptionTxt").innerHTML =
-    computer[0].description;
+    computer.description;
   document.getElementById("computerImage").src =
-    "https://hickory-quilled-actress.glitch.me/" + computer[0].image;
+    "https://hickory-quilled-actress.glitch.me/" + computer.image;
 }
 
 function addToSelect(computers) {

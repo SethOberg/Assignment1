@@ -160,7 +160,7 @@ function bank() {
   updateLoanText(loan);
 }
 
-function buy() {
+function buyComputer() {
   if (balance >= selectedComputer.price) {
     balance -= selectedComputer.price;
     updateBalanceText(balance);

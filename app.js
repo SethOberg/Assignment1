@@ -36,16 +36,17 @@ function takeLoan() {
     alert("Pay off loan before taking another one");
   } else {
     const result = prompt("Please enter amount");
+    //Check if input is a positive number
     if (numberRegExp.test(result)) {
       const loanAmount = parseInt(result);
 
+      //cannot take loan larger than twice the current balance
       if (balance * 2 < loanAmount) {
-        alert("Loan cannot be higher than *2 balance");
+        alert("Loan cannot be higher than twice your balance");
       } else {
         balance += loanAmount;
         loan += loanAmount;
-        document.getElementById("repayLoanBtn").style.display = "block";
-        document.getElementById("loanInfo").style.display = "block";
+        displayLoanRelatedInfo();
         updateLoanText(loan);
         hasLoan = true;
       }
@@ -130,16 +131,18 @@ function work() {
 
 function bank() {
   if (pay > 0) {
-    if (loan > 0) {
-      let loanPay = pay * 0.1;
+    if (hasLoan && loan > 0) {
+      //pay off 10 percent of loan when transferring to bank if person has loan
+      let loanPayOff = pay * 0.1;
 
-      if (loanPay <= loan) {
-        loan -= loanPay;
+      //amount to pay off smaller or equal to loan, decrease with 10 percent
+      if (loanPayOff <= loan) {
+        loan -= loanPayOff;
         balance += pay * 0.9;
         pay = 0;
       } else {
-        pay -= loanPay;
-        balance += pay;
+        //if loan pay off is larger than loan left, decrease salary with the remaining loan
+        balance += pay - loan;
         loan = 0;
         pay = 0;
       }
@@ -147,14 +150,11 @@ function bank() {
       balance += pay;
       pay = 0;
     }
+  } else {
+    alert("No salary to bank");
   }
 
-  if (hasLoan && loan === 0) {
-    hideLoanRelatedInfo();
-    hasLoan = false;
-    alert("Loan paid off");
-  }
-
+  checkIfLoanPaidOff();
   updatePayText(pay);
   updateBalanceText(balance);
   updateLoanText(loan);
@@ -175,22 +175,19 @@ function repayLoan() {
     alert("You have no loan to pay off");
   } else {
     const result = prompt("Please enter amount");
+    //Check if input is a positive number
     if (numberRegExp.test(result)) {
-      const payBack = parseInt(result);
+      const amountToPayOff = parseInt(result);
 
-      if (payBack > pay) {
+      if (amountToPayOff > pay) {
         alert("Insufficient funds");
-      } else if (payBack > loan) {
+      } else if (amountToPayOff > loan) {
         alert("Cannot pay back more than loan");
       } else {
-        pay -= payBack;
-        loan -= payBack;
+        pay -= amountToPayOff;
+        loan -= amountToPayOff;
 
-        if (loan == 0) {
-          hideLoanRelatedInfo();
-          hasLoan = false;
-          alert("Loan paid off");
-        }
+        checkIfLoanPaidOff();
         updatePayText(pay);
         updateLoanText(loan);
       }
@@ -225,4 +222,21 @@ function updateComputerPriceText(price) {
 function hideLoanRelatedInfo() {
   document.getElementById("repayLoanBtn").style.display = "none";
   document.getElementById("loanInfo").style.display = "none";
+}
+
+function displayLoanRelatedInfo() {
+  document.getElementById("repayLoanBtn").style.display = "block";
+  document.getElementById("loanInfo").style.display = "block";
+}
+
+function imageMissing() {
+  document.getElementById("computerImage").src = "images/imageMissing.jpg";
+}
+
+function checkIfLoanPaidOff() {
+  if (hasLoan && loan === 0) {
+    hideLoanRelatedInfo();
+    hasLoan = false;
+    alert("Loan paid off");
+  }
 }

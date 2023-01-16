@@ -103,8 +103,8 @@ function updateTexts(computerId) {
 
   displayFeatures(computer[0].specs);
   updateComputerPriceText(computer[0].price);
-  document.getElementById("computerName").innerHTML = computer[0].title;
-  document.getElementById("computerDescription").innerHTML =
+  document.getElementById("computerNameTxt").innerHTML = computer[0].title;
+  document.getElementById("computerDescriptionTxt").innerHTML =
     computer[0].description;
   document.getElementById("computerImage").src =
     "https://hickory-quilled-actress.glitch.me/" + computer[0].image;
@@ -203,24 +203,24 @@ function repayLoan() {
 }
 
 function updateBalanceText(amount) {
-  document.getElementById("balance").innerHTML = new Intl.NumberFormat().format(
-    amount
-  );
+  document.getElementById("balanceTxt").innerHTML =
+    new Intl.NumberFormat().format(amount);
 }
 
 function updateLoanText(amount) {
-  document.getElementById("loanLbl").innerHTML = new Intl.NumberFormat().format(
+  document.getElementById("loanTxt").innerHTML = new Intl.NumberFormat().format(
     amount
   );
 }
 
 function updatePayText(amount) {
-  document.getElementById("payAmount").innerHTML =
-    new Intl.NumberFormat().format(amount);
+  document.getElementById("payTxt").innerHTML = new Intl.NumberFormat().format(
+    amount
+  );
 }
 
 function updateComputerPriceText(price) {
-  document.getElementById("priceLbl").innerHTML =
+  document.getElementById("computerPriceTxt").innerHTML =
     new Intl.NumberFormat().format(price);
 }
 

@@ -27,12 +27,12 @@ fetchUsers().then((computers) => {
   allComputers = computers;
 
   addToSelect(computers);
-  updateTexts(allComputers[0].id);
+  updateComputerDetails(allComputers[0].id);
   selectedComputer = allComputers[0];
 });
 
 function takeLoan() {
-  if (loan > 0) {
+  if (hasLoan && loan > 0) {
     alert("Pay off loan before taking another one");
   } else {
     const result = prompt("Please enter amount");
@@ -81,14 +81,14 @@ function addComputersToDropdown(computers) {
 function computerSelected() {
   let selection = document.getElementById("computerSelect");
 
-  updateTexts(selection.options[selection.selectedIndex].value);
+  updateComputerDetails(selection.options[selection.selectedIndex].value);
 
   selectedComputer = allComputers.filter(
     (item) => item.id == selection.options[selection.selectedIndex].value
   )[0];
 }
 
-function displayFeatures(features) {
+function displayComputerFeatures(features) {
   let list = document.getElementById("featureList");
   document.getElementById("featureList").innerHTML = "";
 
@@ -99,10 +99,10 @@ function displayFeatures(features) {
   });
 }
 
-function updateTexts(computerId) {
+function updateComputerDetails(computerId) {
   const computer = allComputers.filter((item) => item.id == computerId);
 
-  displayFeatures(computer[0].specs);
+  displayComputerFeatures(computer[0].specs);
   updateComputerPriceText(computer[0].price);
   document.getElementById("computerNameTxt").innerHTML = computer[0].title;
   document.getElementById("computerDescriptionTxt").innerHTML =

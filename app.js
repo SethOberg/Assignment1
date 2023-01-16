@@ -16,6 +16,15 @@ function startUp() {
   fetchUsers();
 }
 
+function changeFileTypeOnImage5() {
+  let image5 = allComputers[4].image.substring(
+    0,
+    allComputers[4].image.lastIndexOf(".")
+  );
+  image5 += ".png";
+  allComputers[4].image = image5;
+}
+
 async function fetchUsers() {
   const response = await fetch(API_URL);
   const computers = await response.json();
@@ -30,6 +39,7 @@ fetchUsers().then((computers) => {
   //first computer marked as selected
   selectedComputer = allComputers[0];
   updateComputerDetails(selectedComputer);
+  changeFileTypeOnImage5();
 });
 
 function takeLoan() {

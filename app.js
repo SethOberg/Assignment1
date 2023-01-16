@@ -4,7 +4,7 @@ let balance = 0;
 let pay = 0;
 let loan = 0;
 let hasLoan = false;
-let allComputers;
+let computers;
 let selectedComputer;
 
 window.addEventListener("load", startUp());
@@ -13,34 +13,24 @@ function startUp() {
   updateBalanceText(balance);
   updatePayText(pay);
   updateLoanText(loan);
-  fetchUsers();
+  fetchComputers();
 }
 
-function changeFileTypeOnImage5() {
-  let image5 = allComputers[4].image.substring(
-    0,
-    allComputers[4].image.lastIndexOf(".")
-  );
-  image5 += ".png";
-  allComputers[4].image = image5;
+async function fetchComputers() {
+  try {
+    const apiResponse = await fetch(API_URL);
+
+    computers = await apiResponse.json();
+
+    addComputersToDropdown(computers);
+    //first computer marked as selected
+    selectedComputer = computers[0];
+    updateComputerDetails(selectedComputer);
+    changeFileTypeOnImage5();
+  } catch (error) {
+    console.log(error);
+  }
 }
-
-async function fetchUsers() {
-  const response = await fetch(API_URL);
-  const computers = await response.json();
-
-  return computers;
-}
-
-fetchUsers().then((computers) => {
-  allComputers = computers;
-
-  addToSelect(computers);
-  //first computer marked as selected
-  selectedComputer = allComputers[0];
-  updateComputerDetails(selectedComputer);
-  changeFileTypeOnImage5();
-});
 
 function takeLoan() {
   if (hasLoan && loan > 0) {
@@ -76,23 +66,22 @@ function updateComputerImage(str) {
 
 function addComputersToDropdown(computers) {
   let select = document.getElementById("computerSelect");
+  //Clear default value
+  select.options.length = 0;
 
   for (computer of computers) {
     let option = document.createElement("option");
-    const id = document.createTextNode(computer["id"]);
-    const text = document.createTextNode(computer["title"]);
-
-    option.value = id;
-    option.innerHTML = text;
-
+    option.value = computer.id;
+    option.innerHTML = computer.title;
     select.appendChild(option);
   }
 }
 
+//check which computer has been selected from dropdown menu
 function computerSelected() {
   let selection = document.getElementById("computerSelect");
 
-  selectedComputer = allComputers.filter(
+  selectedComputer = computers.filter(
     (item) => item.id == selection.options[selection.selectedIndex].value
   )[0];
 
@@ -117,19 +106,6 @@ function updateComputerDetails(computer) {
   document.getElementById("computerDescriptionTxt").innerHTML =
     computer.description;
   updateComputerImage(computer.image);
-}
-
-function addToSelect(computers) {
-  let options = "";
-
-  for (let computer of computers) {
-    let title = computer.title;
-    let id = computer.id;
-
-    options += `<option value="${id}">${title}</option>`;
-  }
-
-  document.getElementById("computerSelect").innerHTML = options;
 }
 
 function work() {
@@ -247,4 +223,13 @@ function checkIfLoanPaidOff() {
     hasLoan = false;
     alert("Loan paid off");
   }
+}
+
+function changeFileTypeOnImage5() {
+  let image5 = computers[4].image.substring(
+    0,
+    computers[4].image.lastIndexOf(".")
+  );
+  image5 += ".png";
+  computers[4].image = image5;
 }

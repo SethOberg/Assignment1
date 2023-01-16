@@ -1,1 +1,3 @@
-# Assignment1, computer store
+# Assignment1
+
+Computer store

@@ -1,4 +1,5 @@
 const API_URL = "https://hickory-quilled-actress.glitch.me/computers";
+const numberRegExp = /^[0-9]+$/;
 let balance = 0;
 let pay = 0;
 let loan = 0;
@@ -31,13 +32,11 @@ fetchUsers().then((computers) => {
 });
 
 function takeLoan() {
-  let regex = /\d/i;
-
   if (loan > 0) {
     alert("Pay off loan before taking another one");
   } else {
     const result = prompt("Please enter amount");
-    if (regex.test(result)) {
+    if (numberRegExp.test(result)) {
       const loanAmount = parseInt(result);
 
       if (balance * 2 < loanAmount) {
@@ -172,13 +171,11 @@ function buyComputer() {
 }
 
 function repayLoan() {
-  let regex = /\d/i;
-
   if (loan === 0) {
     alert("You have no loan to pay off");
   } else {
     const result = prompt("Please enter amount");
-    if (regex.test(result)) {
+    if (numberRegExp.test(result)) {
       const payBack = parseInt(result);
 
       if (payBack > pay) {

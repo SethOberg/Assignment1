@@ -1,9 +1,10 @@
 const API_URL = "https://hickory-quilled-actress.glitch.me/computers";
 let balance = 0;
 let pay = 0;
-let allComputers;
 let loan = 0;
-let chosenComputer;
+let hasLoan = false;
+let allComputers;
+let selectedComputer;
 
 window.addEventListener("load", startUp());
 
@@ -46,6 +47,7 @@ function takeLoan() {
         document.getElementById("repayLoanBtn").style.display = "block";
         document.getElementById("loanInfo").style.display = "block";
         updateLoanText(loan);
+        hasLoan = true;
       }
     } else {
       alert("Please enter a number");
@@ -57,7 +59,6 @@ function takeLoan() {
 
 function updateImage(str) {
   document.getElementById("computerImage").src = str;
-  document.getElementById("computerImage").style.display = "block";
 }
 
 function addComputersToDropdown(computers) {
@@ -81,7 +82,7 @@ function computerSelected() {
 
   updateTexts(selection.options[selection.selectedIndex].value);
 
-  chosenComputer = allComputers.filter(
+  selectedComputer = allComputers.filter(
     (item) => item.id == selection.options[selection.selectedIndex].value
   )[0];
 }
@@ -148,8 +149,10 @@ function bank() {
     }
   }
 
-  if (loan === 0) {
+  if (hasLoan && loan === 0) {
     hideLoanRelatedInfo();
+    hasLoan = false;
+    alert("Loan paid off");
   }
 
   updatePayText(pay);
@@ -158,9 +161,9 @@ function bank() {
 }
 
 function buy() {
-  if (pay >= chosenComputer.price) {
-    pay -= chosenComputer.price;
-    updatePayText(pay);
+  if (balance >= selectedComputer.price) {
+    balance -= selectedComputer.price;
+    updateBalanceText(balance);
     alert("You bought a new computer!");
   } else {
     alert("Insufficient funds");
@@ -187,6 +190,8 @@ function repayLoan() {
 
         if (loan == 0) {
           hideLoanRelatedInfo();
+          hasLoan = false;
+          alert("Loan paid off");
         }
         updatePayText(pay);
         updateLoanText(loan);

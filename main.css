@@ -83,8 +83,6 @@ ul.listTest {
 
 #computerImage img {
   width: 100%;
-  object-fit: contain;
-  display: none;
 }
 
 #repayLoanBtn {

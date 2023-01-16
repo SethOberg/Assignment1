@@ -59,8 +59,9 @@ function takeLoan() {
   updateBalanceText(balance);
 }
 
-function updateImage(str) {
-  document.getElementById("computerImage").src = str;
+function updateComputerImage(str) {
+  document.getElementById("computerImage").src =
+    "https://hickory-quilled-actress.glitch.me/" + str;
 }
 
 function addComputersToDropdown(computers) {
@@ -105,8 +106,7 @@ function updateComputerDetails(computer) {
   document.getElementById("computerNameTxt").innerHTML = computer.title;
   document.getElementById("computerDescriptionTxt").innerHTML =
     computer.description;
-  document.getElementById("computerImage").src =
-    "https://hickory-quilled-actress.glitch.me/" + computer.image;
+  updateComputerImage(computer.image);
 }
 
 function addToSelect(computers) {

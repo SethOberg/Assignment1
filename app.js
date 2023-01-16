@@ -26,7 +26,7 @@ async function fetchComputers() {
     //first computer marked as selected
     selectedComputer = computers[0];
     updateComputerDetails(selectedComputer);
-    changeFileTypeOnImage5();
+    //changeFileTypeOnImage5();
   } catch (error) {
     console.log(error);
   }
@@ -59,9 +59,23 @@ function takeLoan() {
   updateBalanceText(balance);
 }
 
-function updateComputerImage(str) {
-  document.getElementById("computerImage").src =
-    "https://hickory-quilled-actress.glitch.me/" + str;
+async function updateComputerImage(str) {
+  try {
+    const apiResponse = await fetch(
+      "https://hickory-quilled-actress.glitch.me/" + str
+    );
+
+    console.log(apiResponse);
+    console.log(apiResponse.status);
+
+    if (apiResponse.status === 404) {
+      imageMissing();
+    } else {
+      document.getElementById("computerImage").src = apiResponse.url;
+    }
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function addComputersToDropdown(computers) {

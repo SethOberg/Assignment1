@@ -26,7 +26,6 @@ async function fetchComputers() {
     //first computer marked as selected
     selectedComputer = computers[0];
     updateComputerDetails(selectedComputer);
-    //changeFileTypeOnImage5();
   } catch (error) {
     console.log(error);
   }
@@ -65,10 +64,7 @@ async function updateComputerImage(str) {
       "https://hickory-quilled-actress.glitch.me/" + str
     );
 
-    console.log(apiResponse);
-    console.log(apiResponse.status);
-
-    if (apiResponse.status === 404) {
+    if (!apiResponse.ok) {
       imageMissing();
     } else {
       document.getElementById("computerImage").src = apiResponse.url;
@@ -113,13 +109,13 @@ function displayComputerFeatures(features) {
   });
 }
 
-function updateComputerDetails(computer) {
+async function updateComputerDetails(computer) {
   displayComputerFeatures(computer.specs);
   updateComputerPriceText(computer.price);
   document.getElementById("computerNameTxt").innerHTML = computer.title;
   document.getElementById("computerDescriptionTxt").innerHTML =
     computer.description;
-  updateComputerImage(computer.image);
+  await updateComputerImage(computer.image);
 }
 
 function work() {
@@ -237,13 +233,4 @@ function checkIfLoanPaidOff() {
     hasLoan = false;
     alert("Loan paid off");
   }
-}
-
-function changeFileTypeOnImage5() {
-  let image5 = computers[4].image.substring(
-    0,
-    computers[4].image.lastIndexOf(".")
-  );
-  image5 += ".png";
-  computers[4].image = image5;
 }
